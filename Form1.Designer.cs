@@ -42,6 +42,8 @@ namespace FabInspectionClient
             this.judgeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.defectCountColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.inspectedAtColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.analysisReasonTextBox = new System.Windows.Forms.TextBox();
+            this.analysisRequestButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.lotDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.inspectionDataGridView)).BeginInit();
             this.SuspendLayout();
@@ -136,7 +138,7 @@ namespace FabInspectionClient
             this.inspectionDataGridView.ReadOnly = true;
             this.inspectionDataGridView.RowHeadersVisible = false;
             this.inspectionDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.inspectionDataGridView.Size = new System.Drawing.Size(776, 269);
+            this.inspectionDataGridView.Size = new System.Drawing.Size(776, 245);
             this.inspectionDataGridView.TabIndex = 2;
             //
             // resultIdColumn
@@ -174,14 +176,37 @@ namespace FabInspectionClient
             this.inspectedAtColumn.Name = "inspectedAtColumn";
             this.inspectedAtColumn.ReadOnly = true;
             //
+            // analysisReasonTextBox
+            //
+            this.analysisReasonTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.analysisReasonTextBox.Location = new System.Drawing.Point(12, 626);
+            this.analysisReasonTextBox.MaxLength = 500;
+            this.analysisReasonTextBox.Multiline = true;
+            this.analysisReasonTextBox.Name = "analysisReasonTextBox";
+            this.analysisReasonTextBox.Size = new System.Drawing.Size(660, 56);
+            this.analysisReasonTextBox.TabIndex = 3;
+            //
+            // analysisRequestButton
+            //
+            this.analysisRequestButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.analysisRequestButton.Location = new System.Drawing.Point(688, 638);
+            this.analysisRequestButton.Name = "analysisRequestButton";
+            this.analysisRequestButton.Size = new System.Drawing.Size(100, 33);
+            this.analysisRequestButton.TabIndex = 4;
+            this.analysisRequestButton.Text = "분석 요청";
+            this.analysisRequestButton.UseVisualStyleBackColor = true;
+            //
             // Form1
             //
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 650);
+            this.ClientSize = new System.Drawing.Size(800, 695);
+            this.Controls.Add(this.analysisRequestButton);
+            this.Controls.Add(this.analysisReasonTextBox);
             this.Controls.Add(this.inspectionDataGridView);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.lotDataGridView);
-            this.MinimumSize = new System.Drawing.Size(600, 300);
+            this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Text = "LOT 목록";
             ((System.ComponentModel.ISupportInitialize)(this.lotDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.inspectionDataGridView)).EndInit();
@@ -203,5 +228,7 @@ namespace FabInspectionClient
         private System.Windows.Forms.DataGridViewTextBoxColumn judgeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn defectCountColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn inspectedAtColumn;
+        private System.Windows.Forms.TextBox analysisReasonTextBox;
+        private System.Windows.Forms.Button analysisRequestButton;
     }
 }

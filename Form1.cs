@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -22,6 +23,7 @@ namespace FabInspectionClient
             BaseAddress = new Uri(ApiBaseUrl)
         };
         private int inspectionRequestVersion;
+        private string selectedLotId;
 
         public Form1()
         {
@@ -29,6 +31,7 @@ namespace FabInspectionClient
             Load += Form1_Load;
             refreshButton.Click += RefreshButton_Click;
             lotDataGridView.CellClick += LotDataGridView_CellClick;
+            analysisRequestButton.Click += AnalysisRequestButton_Click;
         }
 
         private async void Form1_Load(object sender, EventArgs e)
@@ -45,6 +48,7 @@ namespace FabInspectionClient
         {
             refreshButton.Enabled = false;
             inspectionRequestVersion++;
+            selectedLotId = null;
             inspectionDataGridView.DataSource = new List<InspectionDto>();
 
             try
@@ -88,7 +92,103 @@ namespace FabInspectionClient
                 return;
             }
 
+            selectedLotId = lot.LotId;
             await LoadInspectionsAsync(lot.LotId);
+        }
+
+        private async void AnalysisRequestButton_Click(object sender, EventArgs e)
+        {
+            string reason = analysisReasonTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(selectedLotId))
+            {
+                MessageBox.Show("분석 요청할 LOT을 선택하세요.", "입력 확인", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(reason))
+            {
+                MessageBox.Show("분석 사유를 입력하세요.", "입력 확인", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (reason.Length > 500)
+            {
+                MessageBox.Show("분석 사유는 500자 이내로 입력하세요.", "입력 확인", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            await RequestAnalysisAsync(selectedLotId, reason);
+        }
+
+        private async Task RequestAnalysisAsync(string lotId, string reason)
+        {
+            analysisRequestButton.Enabled = false;
+
+            try
+            {
+                string requestJson = SerializeAnalysisTaskRequest(new AnalysisTaskRequestDto { Reason = reason });
+
+                using (var content = new StringContent(requestJson, Encoding.UTF8, "application/json"))
+                using (HttpResponseMessage response = await HttpClient.PostAsync("/api/lots/" + Uri.EscapeDataString(lotId) + "/analysis-tasks", content))
+                {
+                    if (response.StatusCode == HttpStatusCode.Created)
+                    {
+                        MessageBox.Show("분석 요청이 등록되었습니다.", "분석 요청", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        analysisReasonTextBox.Clear();
+                        await LoadLotsAsync();
+                        return;
+                    }
+
+                    string errorMessage = await ReadErrorMessageAsync(response);
+                    MessageBox.Show(errorMessage, "분석 요청 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "분석 요청을 등록하지 못했습니다.\n" + ex.Message,
+                    "분석 요청 오류",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                analysisRequestButton.Enabled = true;
+            }
+        }
+
+        private static string SerializeAnalysisTaskRequest(AnalysisTaskRequestDto request)
+        {
+            var serializer = new DataContractJsonSerializer(typeof(AnalysisTaskRequestDto));
+
+            using (var stream = new MemoryStream())
+            {
+                serializer.WriteObject(stream, request);
+                return Encoding.UTF8.GetString(stream.ToArray());
+            }
+        }
+
+        private static async Task<string> ReadErrorMessageAsync(HttpResponseMessage response)
+        {
+            try
+            {
+                using (Stream responseStream = await response.Content.ReadAsStreamAsync())
+                {
+                    var serializer = new DataContractJsonSerializer(typeof(ApiErrorResponseDto));
+                    var error = serializer.ReadObject(responseStream) as ApiErrorResponseDto;
+
+                    if (error != null && !string.IsNullOrWhiteSpace(error.Message))
+                    {
+                        return error.Message;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return "HTTP " + (int)response.StatusCode + " " + response.ReasonPhrase;
         }
 
         private async Task LoadInspectionsAsync(string lotId)
@@ -167,6 +267,20 @@ namespace FabInspectionClient
 
             [DataMember(Name = "inspectedAt")]
             public string InspectedAt { get; set; }
+        }
+
+        [DataContract]
+        private sealed class AnalysisTaskRequestDto
+        {
+            [DataMember(Name = "reason")]
+            public string Reason { get; set; }
+        }
+
+        [DataContract]
+        private sealed class ApiErrorResponseDto
+        {
+            [DataMember(Name = "message")]
+            public string Message { get; set; }
         }
     }
 }
