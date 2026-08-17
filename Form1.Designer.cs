@@ -36,7 +36,14 @@ namespace FabInspectionClient
             this.statusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.updatedAtColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.inspectionDataGridView = new System.Windows.Forms.DataGridView();
+            this.resultIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.equipmentIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.judgeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.defectCountColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.inspectedAtColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.lotDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inspectionDataGridView)).BeginInit();
             this.SuspendLayout();
             //
             // lotDataGridView
@@ -60,7 +67,7 @@ namespace FabInspectionClient
             this.lotDataGridView.ReadOnly = true;
             this.lotDataGridView.RowHeadersVisible = false;
             this.lotDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.lotDataGridView.Size = new System.Drawing.Size(776, 381);
+            this.lotDataGridView.Size = new System.Drawing.Size(776, 300);
             this.lotDataGridView.TabIndex = 0;
             //
             // lotIdColumn
@@ -101,22 +108,83 @@ namespace FabInspectionClient
             // refreshButton
             //
             this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.refreshButton.Location = new System.Drawing.Point(688, 405);
+            this.refreshButton.Location = new System.Drawing.Point(688, 324);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(100, 33);
             this.refreshButton.TabIndex = 1;
             this.refreshButton.Text = "새로 고침";
             this.refreshButton.UseVisualStyleBackColor = true;
             //
+            // inspectionDataGridView
+            //
+            this.inspectionDataGridView.AllowUserToAddRows = false;
+            this.inspectionDataGridView.AllowUserToDeleteRows = false;
+            this.inspectionDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.inspectionDataGridView.AutoGenerateColumns = false;
+            this.inspectionDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.inspectionDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.resultIdColumn,
+            this.equipmentIdColumn,
+            this.judgeColumn,
+            this.defectCountColumn,
+            this.inspectedAtColumn});
+            this.inspectionDataGridView.Location = new System.Drawing.Point(12, 369);
+            this.inspectionDataGridView.MultiSelect = false;
+            this.inspectionDataGridView.Name = "inspectionDataGridView";
+            this.inspectionDataGridView.ReadOnly = true;
+            this.inspectionDataGridView.RowHeadersVisible = false;
+            this.inspectionDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.inspectionDataGridView.Size = new System.Drawing.Size(776, 269);
+            this.inspectionDataGridView.TabIndex = 2;
+            //
+            // resultIdColumn
+            //
+            this.resultIdColumn.DataPropertyName = "ResultId";
+            this.resultIdColumn.HeaderText = "Result ID";
+            this.resultIdColumn.Name = "resultIdColumn";
+            this.resultIdColumn.ReadOnly = true;
+            //
+            // equipmentIdColumn
+            //
+            this.equipmentIdColumn.DataPropertyName = "EquipmentId";
+            this.equipmentIdColumn.HeaderText = "Equipment ID";
+            this.equipmentIdColumn.Name = "equipmentIdColumn";
+            this.equipmentIdColumn.ReadOnly = true;
+            //
+            // judgeColumn
+            //
+            this.judgeColumn.DataPropertyName = "Judge";
+            this.judgeColumn.HeaderText = "Judge";
+            this.judgeColumn.Name = "judgeColumn";
+            this.judgeColumn.ReadOnly = true;
+            //
+            // defectCountColumn
+            //
+            this.defectCountColumn.DataPropertyName = "DefectCount";
+            this.defectCountColumn.HeaderText = "Defect Count";
+            this.defectCountColumn.Name = "defectCountColumn";
+            this.defectCountColumn.ReadOnly = true;
+            //
+            // inspectedAtColumn
+            //
+            this.inspectedAtColumn.DataPropertyName = "InspectedAt";
+            this.inspectedAtColumn.HeaderText = "Inspected At";
+            this.inspectedAtColumn.Name = "inspectedAtColumn";
+            this.inspectedAtColumn.ReadOnly = true;
+            //
             // Form1
             //
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 650);
+            this.Controls.Add(this.inspectionDataGridView);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.lotDataGridView);
             this.MinimumSize = new System.Drawing.Size(600, 300);
             this.Text = "LOT 목록";
             ((System.ComponentModel.ISupportInitialize)(this.lotDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inspectionDataGridView)).EndInit();
             this.ResumeLayout(false);
         }
 
@@ -129,5 +197,11 @@ namespace FabInspectionClient
         private System.Windows.Forms.DataGridViewTextBoxColumn statusColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn updatedAtColumn;
         private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.DataGridView inspectionDataGridView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn resultIdColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn equipmentIdColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn judgeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn defectCountColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn inspectedAtColumn;
     }
 }
