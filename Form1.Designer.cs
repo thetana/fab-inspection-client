@@ -36,6 +36,7 @@ namespace FabInspectionClient
             this.statusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.updatedAtColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.demoDataButton = new System.Windows.Forms.Button();
             this.inspectionDataGridView = new System.Windows.Forms.DataGridView();
             this.resultIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.equipmentIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -116,6 +117,16 @@ namespace FabInspectionClient
             this.refreshButton.TabIndex = 1;
             this.refreshButton.Text = "새로 고침";
             this.refreshButton.UseVisualStyleBackColor = true;
+            //
+            // demoDataButton
+            //
+            this.demoDataButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.demoDataButton.Location = new System.Drawing.Point(550, 324);
+            this.demoDataButton.Name = "demoDataButton";
+            this.demoDataButton.Size = new System.Drawing.Size(122, 33);
+            this.demoDataButton.TabIndex = 5;
+            this.demoDataButton.Text = "데모 데이터 생성";
+            this.demoDataButton.UseVisualStyleBackColor = true;
             //
             // inspectionDataGridView
             //
@@ -204,6 +215,7 @@ namespace FabInspectionClient
             this.Controls.Add(this.analysisRequestButton);
             this.Controls.Add(this.analysisReasonTextBox);
             this.Controls.Add(this.inspectionDataGridView);
+            this.Controls.Add(this.demoDataButton);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.lotDataGridView);
             this.MinimumSize = new System.Drawing.Size(600, 600);
@@ -222,6 +234,7 @@ namespace FabInspectionClient
         private System.Windows.Forms.DataGridViewTextBoxColumn statusColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn updatedAtColumn;
         private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.Button demoDataButton;
         private System.Windows.Forms.DataGridView inspectionDataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn resultIdColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn equipmentIdColumn;

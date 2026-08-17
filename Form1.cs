@@ -30,6 +30,7 @@ namespace FabInspectionClient
             InitializeComponent();
             Load += Form1_Load;
             refreshButton.Click += RefreshButton_Click;
+            demoDataButton.Click += DemoDataButton_Click;
             lotDataGridView.CellClick += LotDataGridView_CellClick;
             analysisRequestButton.Click += AnalysisRequestButton_Click;
         }
@@ -42,6 +43,60 @@ namespace FabInspectionClient
         private async void RefreshButton_Click(object sender, EventArgs e)
         {
             await LoadLotsAsync();
+        }
+
+        private async void DemoDataButton_Click(object sender, EventArgs e)
+        {
+            await CreateDemoInspectionLotAsync();
+        }
+
+        private async Task CreateDemoInspectionLotAsync()
+        {
+            demoDataButton.Enabled = false;
+
+            try
+            {
+                using (HttpResponseMessage response = await HttpClient.PostAsync("/api/demo/inspection-lots", null))
+                {
+                    if (response.StatusCode == HttpStatusCode.Created)
+                    {
+                        using (Stream responseStream = await response.Content.ReadAsStreamAsync())
+                        {
+                            var serializer = new DataContractJsonSerializer(typeof(DemoInspectionLotResponseDto));
+                            var result = serializer.ReadObject(responseStream) as DemoInspectionLotResponseDto;
+
+                            if (result == null || string.IsNullOrWhiteSpace(result.LotId))
+                            {
+                                throw new InvalidDataException("데모 LOT 생성 응답에 lotId가 없습니다.");
+                            }
+
+                            MessageBox.Show(
+                                "데모 LOT이 생성되었습니다.\n" + result.LotId,
+                                "데모 데이터 생성",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                        }
+
+                        await LoadLotsAsync();
+                        return;
+                    }
+
+                    string errorMessage = await ReadErrorMessageAsync(response);
+                    MessageBox.Show(errorMessage, "데모 데이터 생성 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "데모 데이터를 생성하지 못했습니다.\n" + ex.Message,
+                    "데모 데이터 생성 오류",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                demoDataButton.Enabled = true;
+            }
         }
 
         private async Task LoadLotsAsync()
@@ -281,6 +336,13 @@ namespace FabInspectionClient
         {
             [DataMember(Name = "message")]
             public string Message { get; set; }
+        }
+
+        [DataContract]
+        private sealed class DemoInspectionLotResponseDto
+        {
+            [DataMember(Name = "lotId")]
+            public string LotId { get; set; }
         }
     }
 }
